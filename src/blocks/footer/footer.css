@@ -1,0 +1,19 @@
+.footer {	
+	margin-top: 26px;
+	grid-area: footer;
+}
+
+@media screen and (max-width: 950px) {
+	.footer {
+		margin-left: 40px;
+	}
+}
+
+@media screen and (max-width: 382px) {
+	.footer {
+		margin-top: 8px;
+		margin-left: 19px;
+		font-size: 14px;
+		line-height: calc(17/14);
+	}
+}
