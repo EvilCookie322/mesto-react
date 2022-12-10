@@ -54,7 +54,8 @@ function Main(props) {
 					<Card
 						card={card}
 						onCardClick={props.onCardClick}
-						onDeleteClick={props.onDeleteClick}
+						onDeletePlaceClick={props.onDeletePlaceClick}
+						key={card._id}
 					/>
 				))}
 			</ul>

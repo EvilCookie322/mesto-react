@@ -3,7 +3,7 @@ function Card(props) {
 		props.onCardClick(props.card);
 	}
 	return (
-		<li key={props.card.id} className='element'>
+		<li className='element'>
 			<img
 				onClick={handleCardClick}
 				src={props.card.link}
@@ -16,7 +16,7 @@ function Card(props) {
 				<p className='element__like-count'>{props.card.likes.length}</p>
 			</div>
 			<button
-				onClick={props.onDeleteClick}
+				onClick={props.onDeletePlaceClick}
 				type='button'
 				className='button element__button-trash'
 			></button>

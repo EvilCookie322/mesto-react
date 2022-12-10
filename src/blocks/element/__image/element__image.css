@@ -2,4 +2,5 @@
 	width: 282px;
 	height: 282px;
 	grid-column: span 2;
+	object-fit: cover;
 }
