@@ -10,6 +10,13 @@ function AddPlacePopup(props) {
 		placeName.current.focus();
 	});
 
+	useEffect(() => {
+		if (props.isOpen) {
+			placeName.current.value = "";
+			placeLink.current.value = "";
+		}
+	}, [props.isOpen]);
+
 	function handleSubmit(e) {
 		e.preventDefault();
 		setIsLoading(true);
@@ -18,11 +25,7 @@ function AddPlacePopup(props) {
 				name: placeName.current.value,
 				link: placeLink.current.value,
 			})
-			.then(() => {
-				setIsLoading(false);
-				placeName.current.value = "";
-				placeLink.current.value = "";
-			});
+			.finally(() => setIsLoading(false));
 	}
 	return (
 		<PopupWithForm

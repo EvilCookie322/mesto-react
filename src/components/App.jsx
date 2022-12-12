@@ -21,34 +21,44 @@ function App() {
 
 	//Получение информации о пользователе
 	useEffect(() => {
-		Api.getUserInformation().then((userInformation) => {
-			setCurrentUser(userInformation);
-		});
+		Api.getUserInformation()
+			.then((userInformation) => {
+				if (userInformation) setCurrentUser(userInformation);
+				else return Promise.reject(new Error("Sorry, we have problems"));
+			})
+			.catch((error) => console.error(error));
 	}, []);
 	//Получение карточек
 	useEffect(() => {
 		Api.getInitialCards()
 			.then((cards) => {
-				cards && setCards(cards);
+				if (cards) setCards(cards);
+				else return Promise.reject(new Error("Sorry, we have problems"));
 			})
 			.catch((error) => console.error(error));
 	}, []);
 
 	function handleCardLike(card, isLiked) {
-		(isLiked ? Api.removeLike(card._id) : Api.setLike(card._id)).then(
-			(newCard) => {
-				setCards((cards) =>
-					cards.map((card) => (card._id === newCard._id ? newCard : card))
-				);
-			}
-		);
+		(isLiked ? Api.removeLike(card._id) : Api.setLike(card._id))
+			.then((newCard) => {
+				if (newCard)
+					setCards((cards) =>
+						cards.map((card) => (card._id === newCard._id ? newCard : card))
+					);
+				else return Promise.reject(new Error("Sorry, we have problems"));
+			})
+			.catch((error) => console.error(error));
 	}
 
 	function handleCardDelete(card, isOwn) {
 		if (isOwn) {
-			Api.deleteCard(card._id).then(() => {
-				setCards((cards) => cards.filter((item) => item._id !== card._id));
-			});
+			Api.deleteCard(card._id)
+				.then((answer) => {
+					if (answer)
+						setCards((cards) => cards.filter((item) => item._id !== card._id));
+					else return Promise.reject(new Error("Sorry, we have problems"));
+				})
+				.catch((error) => console.error(error));
 		}
 	}
 
@@ -76,33 +86,42 @@ function App() {
 	}
 
 	function handleUpdateUser({ name, description }) {
-		return Api.updateUserInformation(name, description).then(
-			(userInformation) => {
-				console.log(userInformation);
+		return Api.updateUserInformation(name, description)
+			.then((userInformation) => {
 				if (userInformation) {
 					setCurrentUser(userInformation);
 					closeAllPopups();
+				} else {
+					return Promise.reject(new Error("Sorry, we have problems"));
 				}
-			}
-		);
+			})
+			.catch((error) => console.error(error));
 	}
 
 	function handleUpdateAvatar({ avatar }) {
-		return Api.updateAvatar(avatar).then((userInformation) => {
-			if (userInformation) {
-				setCurrentUser(userInformation);
-				closeAllPopups();
-			}
-		});
+		return Api.updateAvatar(avatar)
+			.then((userInformation) => {
+				if (userInformation) {
+					setCurrentUser(userInformation);
+					closeAllPopups();
+				} else {
+					return Promise.reject(new Error("Sorry, we have problems"));
+				}
+			})
+			.catch((error) => console.error(error));
 	}
 
 	function handleAddPlace(placeInfo) {
-		return Api.createCard(placeInfo).then((newCard) => {
-			if (newCard) {
-				setCards([newCard, ...cards]);
-				closeAllPopups();
-			}
-		});
+		return Api.createCard(placeInfo)
+			.then((newCard) => {
+				if (newCard) {
+					setCards([newCard, ...cards]);
+					closeAllPopups();
+				} else {
+					return Promise.reject(new Error("Sorry, we have problems"));
+				}
+			})
+			.catch((error) => console.error(error));
 	}
 
 	return (

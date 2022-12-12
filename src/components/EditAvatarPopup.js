@@ -1,17 +1,22 @@
 import PopupWithForm from "./PopupWithForm";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function EditAvatarPopup(props) {
 	const avatar = useRef();
 	const [isLoading, setIsLoading] = useState(false);
+
+	useEffect(() => {
+		if (props.isOpen) {
+			avatar.current.value = "";
+		}
+	}, [props.isOpen]);
 
 	function handleSubmit(e) {
 		e.preventDefault();
 		setIsLoading(true);
 		props
 			.onUpdateAvatar({ avatar: avatar.current.value })
-			.then(() => setIsLoading(false));
-		avatar.current.value = "";
+			.finally(() => setIsLoading(false));
 	}
 
 	return (

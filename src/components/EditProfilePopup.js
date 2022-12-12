@@ -9,9 +9,11 @@ function EditProfilePopup(props) {
 	const currentUser = useContext(CurrentUserContext);
 
 	useEffect(() => {
-		setName(currentUser.name);
-		setDescription(currentUser.about);
-	}, [currentUser]);
+		if (props.isOpen) {
+			setName(currentUser.name);
+			setDescription(currentUser.about);
+		}
+	}, [currentUser, props.isOpen]);
 
 	function handleChange(e) {
 		if (e.target.name === "name") {
@@ -37,11 +39,7 @@ function EditProfilePopup(props) {
 			title='Редактировать профиль'
 			name='edit-profile'
 			isOpen={props.isOpen}
-			onClose={() => {
-				props.onClose();
-				setName(currentUser.name);
-				setDescription(currentUser.about);
-			}}
+			onClose={props.onClose}
 			onSubmit={handleSubmit}
 		>
 			<label className='form__field'>
