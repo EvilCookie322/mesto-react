@@ -1,26 +1,9 @@
-import { Api } from "../utils/Api";
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import Card from "./Card";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Main(props) {
-	const [userName, setUserName] = useState("");
-	const [userDescription, setUserDescription] = useState("");
-	const [userAvatar, setUserAvatar] = useState("");
-	const [cards, setCards] = useState([]);
-
-	useEffect(() => {
-		Promise.all([Api.getUserInformation(), Api.getInitialCards()])
-			.then(([userInfo, cards]) => {
-				if (userInfo) {
-					setUserName(userInfo.name);
-					setUserDescription(userInfo.about);
-					setUserAvatar(userInfo.avatar);
-				}
-
-				cards && setCards(cards);
-			})
-			.catch((error) => console.error(error));
-	}, []);
+	const currentUser = useContext(CurrentUserContext);
 
 	return (
 		<main className='content'>
@@ -31,16 +14,20 @@ function Main(props) {
 						type='button'
 						className='profile__edit-avatar-button'
 					></button>
-					<img src={userAvatar} alt='Аватар' className='profile__photo' />
+					<img
+						src={currentUser.avatar}
+						alt='Аватар'
+						className='profile__photo'
+					/>
 				</div>
 				<div className='profile__info'>
-					<h1 className='profile__name'>{userName}</h1>
+					<h1 className='profile__name'>{currentUser.name}</h1>
 					<button
 						onClick={props.onEditProfileClick}
 						type='button'
 						className='button profile__edit-button'
 					></button>
-					<p className='profile__description'>{userDescription}</p>
+					<p className='profile__description'>{currentUser.about}</p>
 				</div>
 				<button
 					onClick={props.onAddPlaceClick}
@@ -50,11 +37,12 @@ function Main(props) {
 			</section>
 
 			<ul className='elements'>
-				{cards.map((card) => (
+				{props.cards.map((card) => (
 					<Card
 						card={card}
+						onCardLike={props.onCardLike}
 						onCardClick={props.onCardClick}
-						onDeletePlaceClick={props.onDeletePlaceClick}
+						onCardDelete={props.onCardDelete}
 						key={card._id}
 					/>
 				))}
